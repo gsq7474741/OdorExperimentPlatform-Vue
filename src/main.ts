@@ -13,6 +13,9 @@ import App from './App.vue'
 // Composables
 import { createApp } from 'vue'
 
+import ECharts from 'vue-echarts';
+import 'echarts';
+
 // Import Vue Router
 import { createRouter, createWebHistory } from 'vue-router'
 import PageNotFound from "@/components/PageNotFound.vue";
@@ -65,5 +68,6 @@ registerPlugins(app)
 
 // Use router
 app.use(router)
+  .component('ECharts', ECharts)
 
 app.mount('#app')

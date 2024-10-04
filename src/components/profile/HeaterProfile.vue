@@ -1,6 +1,11 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {ref, onMounted, onBeforeUnmount, watch,} from 'vue'
+import TopBar from "@/components/TopBar.vue";
+import * as api from "@/api_client/api";
+
+
+const apiIns = new api.DevicePanelApi({basePath: "http://localhost:3090"});
 
 const headers = ref([
   {key: 'id', title: '配置ID'},
@@ -10,49 +15,8 @@ const headers = ref([
   {key: 'ttv', title: '温度-时间图'},
 ])
 
-const query_data_sample = ref([
-  // 示例数据
-
-
-  // 1,heater_1,600.600000,140,"[[320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429]]"
-  // 2,heater_1,600.600000,140,"[[320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429]]"
-  // 3,heater_301,18.340000,140,"[[100, 2], [100, 41], [200, 2], [200, 14], [200, 14], [200, 14], [320, 2], [320, 14], [320, 14], [320, 14]]"
-  // 4,heater_321,18.900000,140,"[[100, 43], [320, 2], [320, 2], [200, 2], [200, 21], [200, 21], [320, 2], [320, 14], [320, 14], [320, 14]]"
-
-  {
-    id: '1',
-    hp_name: 'heater_1',
-    duration: 600.600000,
-    time_base: 140,
-    ttv: [[320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429]]
-  },
-  {
-    id: '2',
-    hp_name: 'heater_1',
-    duration: 600.600000,
-    time_base: 140,
-    ttv: [[320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429], [320, 429]]
-  },
-  {
-    id: '3',
-    hp_name: 'heater_301',
-    duration: 18.340000,
-    time_base: 140,
-    ttv: [[100, 2], [100, 41], [200, 2], [200, 14], [200, 14], [200, 14], [320, 2], [320, 14], [320, 14], [320, 14]]
-  },
-  {
-    id: '4',
-    hp_name: 'heater_321',
-    duration: 18.900000,
-    time_base: 140,
-    ttv: [[100, 43], [320, 2], [320, 2], [200, 2], [200, 21], [200, 21], [320, 2], [320, 14], [320, 14], [320, 14]]
-  },
-
-
-]);
-
-
-let calced_list_data = query_data_sample.value.map((item) => {
+const calc_list_data = ((item: Detail) => {
+  // return (item) => {
   let ttv = item.ttv;
   let times = [];
   let temps = [ttv[0][0]];
@@ -72,7 +36,50 @@ let calced_list_data = query_data_sample.value.map((item) => {
     times: times,
     temps: temps,
   };
-});
+  // }
+
+})
+
+const hp_list = ref([
+  {
+    id: -1,
+    hp_name: 'undefined-1'
+  },
+])
+
+const hp_detail_list = ref<Detail[]>([])
+
+const calced_list_data = ref(hp_detail_list.value.map(calc_list_data));
+
+watch(hp_detail_list, (newVal, oldVal) => {
+  calced_list_data.value = newVal.map(calc_list_data);
+})
+
+type Detail = {
+  duration: number;
+  hp_name: string;
+  id: number;
+  time_base: number;
+  ttv: Array<number[]>;
+}
+
+onMounted(() => {
+  console.log('mounted')
+
+  apiIns.hpListGet().then((res) => {
+    console.log(res)
+    hp_list.value = res.data
+  }).then(() => {
+    console.log('hp_list:')
+    console.log(hp_list.value)
+
+    apiIns.hpDetailPost({id_list: hp_list.value.map(item => item.id)}).then((res) => {
+      console.log(res.data)
+      hp_detail_list.value = res.data
+    })
+  })
+})
+
 
 </script>
 
@@ -103,19 +110,7 @@ let calced_list_data = query_data_sample.value.map((item) => {
                 </v-sparkline>
               </template>
 
-              <template v-slot:item.status="{ item }">
-                <div>
-                  <v-chip
-                    :color="item.status === '运行中' ? 'green' : 'red'"
-                    :text="item.status "
-                    class="text-uppercase"
-                    size="small"
-                    label
-                  ></v-chip>
-                </div>
-              </template>
               <template v-slot:item.id="{ item }">
-
                 <v-btn
                   :to="'/profile/heater_profile/panel/' + item.id"
                   class="text-none"
