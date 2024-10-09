@@ -52,10 +52,10 @@
               <!--                  ></v-chip>-->
               <!--                </div>-->
               <!--              </template>-->
-              <template v-slot:item.labelId="{ item }">
+              <template v-slot:item.id="{ item }">
 
                 <v-btn
-                  :to="'/label/panel/' + item.labelId"
+                  :to="'/label/panel/' + item.id"
                   class="text-none"
                   color="primary"
                   min-width="92"
@@ -63,7 +63,7 @@
                   rounded
                 >
                   <div class="text-decoration-underline">
-                    {{ item.labelId }}
+                    {{ item.id }}
                   </div>
                 </v-btn>
 
@@ -91,8 +91,8 @@ import * as api from "@/api_client/api";
 const apiIns = new api.DevicePanelApi({basePath: "http://localhost:3090"});
 
 const headers = ref([
-  {key: 'labelId', title: '标签ID'},
-  {key: 'labelStr', title: '标签名称'},
+  {key: 'id', title: '标签ID'},
+  {key: 'labelName', title: '标签名称'},
   {key: 'nlDescription', title: '语言描述'},
   {key: 'img', title: '图片'},
   {key: 'concentration', title: '浓度主观评价'},
@@ -103,15 +103,15 @@ const headers = ref([
 ])
 
 type Detail = {
-  labelId?: number;
-  labelStr?: string;
-  nlDescription?: string;
-  img?: string;
-  concentration?: number;
-  father?: number;
-  sampleNum?: number;
-  dpNum?: number;
-  note?: string;
+  concentration: number;
+  dpNum: number;
+  father: number;
+  id: number;
+  img: string[];
+  labelName: string;
+  nlDescription: string;
+  note: string;
+  sampleNum: number;
 }
 
 const label_detail_list = ref<Detail[]>([])

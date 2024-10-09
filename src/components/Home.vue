@@ -5,7 +5,7 @@
       <v-container>
         <v-row>
           <v-col>
-            <h1>欢迎来到 CS2 服务器管理系统</h1>
+            <h1>欢迎来到电子鼻实验管理系统</h1>
           </v-col>
         </v-row>
       </v-container>

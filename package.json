@@ -7,10 +7,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "@mdi/font": "^7.4.47",
+    "ali-oss": "^6.21.0",
     "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
     "echarts": "^5.5.1",
     "plotly.js-dist": "^2.35.2",
     "roboto-fontface": "*",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@babel/types": "^7.24.0",
+    "@types/ali-oss": "^6.16.11",
     "@types/node": "^20.11.25",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/language-server": "^2.1.6",

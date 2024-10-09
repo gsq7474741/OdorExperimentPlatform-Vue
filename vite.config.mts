@@ -43,5 +43,14 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    cors: true,
+    // 使用代理来处理CORS问题
+    proxy: {
+      'odor-exp-platform.oss/': {
+        target: 'http://odor-exp-platform.oss-cn-chengdu.aliyuncs.com', // 目标服务器地址
+        changeOrigin: true, // 启用CORS
+        // 其他可选配置...
+      },
+    },
   },
 })

@@ -229,9 +229,17 @@
                   </v-card-title>
                 </v-col>
 
+
                 <v-col class="d-flex justify-end">
                   <v-spacer></v-spacer>
                   <v-row>
+                    <v-col class="d-flex justify-end" cols="4">
+                      <v-switch
+                        v-model="liveUpdateEnabled"
+                        label="Live Update"
+                      ></v-switch>
+                    </v-col>
+
                     <v-col class="d-flex justify-end">
                       <v-select
                         class="mr-3"
@@ -358,6 +366,8 @@ let updateInterval = ref<number>();
 // const currentLabelName = ref('test1');
 const recordedDataPoints = ref(0);
 
+const liveUpdateEnabled = ref(false);
+let liveUpdateInterval = ref<number | null>(null);
 // 'temperature', 'pressure', 'relative_humidity', 'resistance_gas_sensor'
 const chartFieldSelect = ref({name: '气体阻抗', field: 'resistance_gas_sensor'},);
 
@@ -457,6 +467,30 @@ const fetchChartData = (field: string, sensor_idx: number) => {
   });
 };
 
+const startLiveUpdate = () => {
+  if (liveUpdateInterval.value) {
+    clearInterval(liveUpdateInterval.value);
+  }
+  liveUpdateInterval.value = setInterval(() => {
+    fetchChartData(chartFieldSelect.value.field, chartSensorSelect.value.sensor_idx);
+  }, 5000); // Update every 5 seconds
+};
+
+const stopLiveUpdate = () => {
+  if (liveUpdateInterval.value) {
+    clearInterval(liveUpdateInterval.value);
+    liveUpdateInterval.value = null;
+  }
+};
+
+watch(liveUpdateEnabled, (newVal) => {
+  if (newVal) {
+    startLiveUpdate();
+  } else {
+    stopLiveUpdate();
+  }
+});
+
 watch(chartSensorSelect, (newVal) => {
   console.log(newVal);
   fetchChartData(chartFieldSelect.value.field, newVal.sensor_idx);
@@ -486,20 +520,6 @@ const new_sample_model = ref({
 });
 
 import * as api from "@/api_client/api";
-import axios from "axios";
-import {SeriesData} from "echarts/types/dist/shared";
-
-// create a axios instance
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3090',
-  timeout: 8000,
-  headers: {'X-Custom-Header': 'foobar'}
-});
-
-// const apiFp = api.DevicePanelApiFactory({
-//   basePath: "http://localhost:3090",
-//
-// }, "http://localhost:3090", axiosInstance);
 
 const apiIns = new api.DevicePanelApi({basePath: "http://localhost:3090"});
 
