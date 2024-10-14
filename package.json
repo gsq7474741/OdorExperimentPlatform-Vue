@@ -2,7 +2,7 @@
   "name": "odor_experiment_platform",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 30800",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview"
   },

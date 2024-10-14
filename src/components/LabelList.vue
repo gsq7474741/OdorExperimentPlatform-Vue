@@ -88,7 +88,9 @@ import TopBar from "@/components/TopBar.vue";
 import * as api from "@/api_client/api";
 
 
-const apiIns = new api.DevicePanelApi({basePath: "http://localhost:3090"});
+import {apiBaseUrl} from "@/config";
+
+const apiIns = new api.FrontendApi({basePath: apiBaseUrl});
 
 const headers = ref([
   {key: 'id', title: '标签ID'},

@@ -304,22 +304,12 @@
 import {defineComponent, ref, onMounted, onBeforeUnmount} from 'vue'
 import {useRoute} from "vue-router";
 import TopBar from "@/components/TopBar.vue";
-import OSS from 'ali-oss';
 import * as api from "@/api_client/api";
 
-const client = new OSS({
-  // 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。
-  accessKeyId: import.meta.env.VITE_OSS_ACCESS_KEY_ID,
-  accessKeySecret: import.meta.env.VITE_OSS_ACCESS_KEY_SECRET,
-  // yourRegion填写Bucket所在地域。以华东1（杭州）为例，Region填写为oss-cn-hangzhou。
-  region: 'oss-cn-chengdu',
-  authorizationV4: true,
-  endpoint: 'oss/',
-  // yourBucketName填写Bucket名称。
-  bucket: 'odor-exp-platform',
-});
 
-const apiIns = new api.DevicePanelApi({basePath: "http://localhost:3090"});
+import {apiBaseUrl} from "@/config";
+
+const apiIns = new api.FrontendApi({basePath: apiBaseUrl});
 
 const route = useRoute();
 const labelId = ref(route.params.id);
@@ -565,7 +555,7 @@ const fetchLabelDetailState = () => {
 
 onMounted(() => {
   console.log('mounted')
-  console.log('env:' + process.env.OSS_ACCESS_KEY_ID)
+  // console.log('env:' + process.env.OSS_ACCESS_KEY_ID)
 
   // apiIns.labelDetailPost({id_list: [parseInt(labelId.value)]}).then((res) => {
   //   console.log(res)

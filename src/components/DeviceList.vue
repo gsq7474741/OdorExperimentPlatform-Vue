@@ -85,8 +85,9 @@ import {ref, onMounted, onBeforeUnmount, watch,} from 'vue'
 import TopBar from "@/components/TopBar.vue";
 import * as api from "@/api_client/api";
 
+import {apiBaseUrl} from "@/config";
 
-const apiIns = new api.DevicePanelApi({basePath: "http://localhost:3090"});
+const apiIns = new api.FrontendApi({basePath: apiBaseUrl});
 
 
 // export default defineComponent({

@@ -29,6 +29,8 @@ import DeviceList from "@/components/DeviceList.vue";
 import DevicePanel from "@/components/DevicePanel.vue";
 import LabelList from "@/components/LabelList.vue";
 import LabelPanel from "@/components/LabelPanel.vue";
+import ModelList from "@/components/ModelList.vue";
+import ModelPanel from "@/components/ModelPanel.vue";
 
 
 // Define routes
@@ -45,6 +47,10 @@ const routes = [
   { path: '/label/list', component: LabelList },  // 标签列表页面
   { path: '/label/panel/:id', component: LabelPanel },  // 标签控制面板页面
   { path: '/profile', component: Profile },  //
+
+  { path: '/model/list', component: ModelList },  //
+  { path: '/model/panel/:id', component: ModelPanel },  //
+
 
   { path: '/account/login', component: Login }, // 登录页面，参考openai的登录界面样式，要接入使用第三方认证，谷歌、微信、github等
   { path: '/account/register', component: Register }, // 注册页面，同登录页面

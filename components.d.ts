@@ -24,6 +24,8 @@ declare module 'vue' {
     LabelList: typeof import('./src/components/LabelList.vue')['default']
     LabelPanel: typeof import('./src/components/LabelPanel.vue')['default']
     Login: typeof import('./src/components/Login.vue')['default']
+    ModelList: typeof import('./src/components/ModelList.vue')['default']
+    ModelPanel: typeof import('./src/components/ModelPanel.vue')['default']
     PageNotFound: typeof import('./src/components/PageNotFound.vue')['default']
     Profile: typeof import('./src/components/Profile.vue')['default']
     Register: typeof import('./src/components/Register.vue')['default']
